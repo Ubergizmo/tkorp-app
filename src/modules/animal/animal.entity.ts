@@ -1,9 +1,10 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ObjectType, Field } from '@nestjs/graphql'; // Importez ObjectType et Field
 import { PersonEntity } from '../person/person.entity';
+import { DateScalar } from 'graphql-date-scalars';
 
 @ObjectType()
-@Entity()
+@Entity('animal')
 export class AnimalEntity {
   @Field()
   @PrimaryGeneratedColumn()
@@ -13,7 +14,7 @@ export class AnimalEntity {
   @Column('varchar', { length: 500 })
   name: string;
 
-  @Field(()=>Date)
+  @Field(() => DateScalar)
   @Column('date')
   dateOfBirth: Date;
 
@@ -38,6 +39,8 @@ export class AnimalEntity {
   ownerId: number;
 
   @Field(() => PersonEntity)
-  @ManyToOne(() => PersonEntity, (person) => person.animals)
+  @ManyToOne(() => PersonEntity, (person) => person.animals, {
+    onDelete: 'CASCADE',
+  })
   owner: PersonEntity;
 }

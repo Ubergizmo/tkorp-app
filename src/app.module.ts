@@ -1,6 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -9,6 +7,7 @@ import { PersonModule } from './modules/person/person.module';
 import { AnimalModule } from './modules/animal/animal.module';
 import { PersonEntity } from './modules/person/person.entity';
 import { AnimalEntity } from './modules/animal/animal.entity';
+import { DateScalar } from 'graphql-date-scalars';
 
 @Module({
   imports: [
@@ -27,6 +26,10 @@ import { AnimalEntity } from './modules/animal/animal.entity';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       playground: true,
+      resolvers: {
+        Date: DateScalar,
+      },
+
     }),
     PersonModule,
     AnimalModule,

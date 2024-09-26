@@ -1,5 +1,6 @@
 import { InputType, Field, Int } from '@nestjs/graphql';
 import { IsNotEmpty } from 'class-validator';
+import { DateScalar } from 'graphql-date-scalars';
 
 @InputType()
 export class CreateAnimalInput {
@@ -7,7 +8,7 @@ export class CreateAnimalInput {
   @IsNotEmpty()
   name: string;
 
-  @Field()
+  @Field(() => DateScalar)
   @IsNotEmpty()
   dateOfBirth: Date;
 
@@ -27,8 +28,7 @@ export class CreateAnimalInput {
   @IsNotEmpty()
   weight: number;
 
-
-  @Field(()=>Int)
+  @Field(() => Int)
   @IsNotEmpty()
   ownerId: number;
 }

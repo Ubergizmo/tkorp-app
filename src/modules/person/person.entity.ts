@@ -3,7 +3,7 @@ import { AnimalEntity } from '../animal/animal.entity';
 import { ObjectType, Field } from '@nestjs/graphql'; // Importer les décorateurs GraphQL
 
 @ObjectType()
-@Entity()
+@Entity('person')
 export class PersonEntity {
   @Field()
   @PrimaryGeneratedColumn()
@@ -18,14 +18,14 @@ export class PersonEntity {
   lastName: string;
 
   @Field()
-  @Column('varchar', { unique: true })
+  @Column('varchar')
   email: string;
 
   @Field()
-  @Column('varchar', { unique: true })
+  @Column('varchar')
   phoneNumber: string;
 
-  @Field(() => [AnimalEntity]) // Indique que c'est une liste d'AnimalEntity
+  @Field(() => [AnimalEntity])
   @OneToMany(() => AnimalEntity, (animal) => animal.owner)
   animals: AnimalEntity[];
 }
