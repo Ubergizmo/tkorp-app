@@ -42,7 +42,10 @@ export class AnimalService {
   }
 
   async getAnimal(id: number): Promise<AnimalEntity> {
-    const animal = await this.animalRepository.findOne({ where: { id } });
+    const animal = await this.animalRepository.findOne({
+      where: { id },
+      relations: ['owner'],
+    });
     if (!animal)
       throw new NotFoundException(
         'Aucun résultat',

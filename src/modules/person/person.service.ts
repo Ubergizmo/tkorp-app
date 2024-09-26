@@ -39,7 +39,10 @@ export class PersonService {
   }
 
   async getPerson(id: number): Promise<PersonEntity> {
-    const person = await this.personRepository.findOne({ where: { id } });
+    const person = await this.personRepository.findOne({
+      where: { id },
+      relations: ['animals'],
+    });
     if (!person)
       throw new NotFoundException(
         'Aucun résultat',

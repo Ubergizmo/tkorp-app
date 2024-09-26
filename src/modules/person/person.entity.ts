@@ -25,7 +25,7 @@ export class PersonEntity {
   @Column('varchar')
   phoneNumber: string;
 
-  @Field(() => [AnimalEntity])
+  @Field(() => [AnimalEntity],{nullable:"items"})
   @OneToMany(() => AnimalEntity, (animal) => animal.owner)
   animals: AnimalEntity[];
 }

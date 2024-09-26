@@ -38,7 +38,7 @@ export class AnimalEntity {
   @Column('int')
   ownerId: number;
 
-  @Field(() => PersonEntity)
+  @Field(() => PersonEntity, { nullable: true })
   @ManyToOne(() => PersonEntity, (person) => person.animals, {
     onDelete: 'CASCADE',
   })
