@@ -18,6 +18,11 @@ export class PersonResolver {
     return await this.personService.getPerson(id);
   }
 
+  @Query(() => PersonEntity)
+  async ownerWithMostCats() {
+    return await this.personService.ownerWithMostCats();
+  }
+
   @Mutation(() => PersonEntity)
   async createPerson(@Args('data') data: CreatePersonInput) {
     return await this.personService.createPerson(data);

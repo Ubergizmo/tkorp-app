@@ -1,7 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { AnimalService } from './animal.service';
 import { AnimalEntity } from './animal.entity';
-import { Animal } from './Types';
 import { CreateAnimalInput } from './animal.input';
 
 @Resolver()
@@ -11,6 +10,21 @@ export class AnimalResolver {
   @Query(() => AnimalEntity)
   async animal(@Args('id') id: number) {
     return await this.animalService.getAnimal(id);
+  }
+
+  @Query(() => AnimalEntity)
+  async oldestAnimal() {
+    return await this.animalService.oldestAnimal();
+  }
+
+  @Query(() => AnimalEntity)
+  async mostRepresentedSpecies() {
+    return await this.animalService.mostRepresentedSpecies();
+  }
+
+  @Query(() => AnimalEntity)
+  async getAnimalsWithOwnersByWeight() {
+    return await this.animalService.getAnimalsWithOwnersByWeight();
   }
 
   @Query(() => [AnimalEntity])

@@ -1,0 +1,81 @@
+x L'animal le plus vieux est Rocky 2009-09-21 ID: 924
+ SELECT * FROM animal ORDER BY `dateOfBirth` ASC
+
+query {
+  oldestAnimal {
+    name
+    species
+    id
+  }
+}
+
+
+x L'espèce la mieux représentée est l'oiseau
+ SELECT species, COUNT(*) AS species_count FROM animal GROUP BY species ORDER BY species_count DESC
+
+ query {
+  mostRepresentedSpecies {
+    species
+  }
+}
+
+
+x La personne avec le plus d'animaux est Sophia Brown ID: 268
+ SELECT person.id, person.firstName, person.lastName, COUNT(animal.id) AS number FROM person INNER JOIN animal ON animal.ownerId = person.id GROUP BY person.id, person.firstName, person.lastName ORDER BY number DESC
+
+ query {
+  ownerWithMostAnimals {
+    firstName
+    lastName
+    id
+  }
+}
+
+x La personne avec le plus de chat est Sarah White ID: 268
+ SELECT person.id, person.firstName, person.lastName, COUNT(*) AS number FROM animal INNER JOIN person ON animal.ownerId = person.id WHERE animal.species = 'cat' GROUP BY person.id, person.firstName, person.lastName ORDER BY number DESC
+
+ query {
+  ownerWithMostCats {
+    id
+    firstName
+    lastName
+  }
+}
+
+
+x L'animal le plus lourd est chloe avec un poids de 49937 son propriétaire est Emma Smith ID: 209
+ SELECT person.id, person.firstName, person.lastName, animal.id, animal.name, animal.weight FROM animal INNER JOIN person ON animal.ownerId = person.id ORDER BY weight DESC
+ 
+ query {
+  getAnimalsWithOwnersByWeight {
+    id
+    name
+    weight
+    owner {
+      id
+      firstName
+      lastName
+    }
+  }
+}
+
+
+x Michael Wilson ID: 760 possède le groupe d'animaux le plus lourd (chat) et le poids total est 112532
+ SELECT 
+    personId,
+    firstName,
+    lastName,
+    species,
+    totalWeight
+FROM (
+    SELECT 
+        person.id AS personId, 
+        person.firstName, 
+        person.lastName, 
+        animal.species, 
+        SUM(animal.weight) AS totalWeight
+    FROM person
+    INNER JOIN animal ON animal.ownerId = person.id
+    GROUP BY person.id, person.firstName, person.lastName, animal.species
+) AS subquery
+ORDER BY totalWeight DESC LIMIT 1

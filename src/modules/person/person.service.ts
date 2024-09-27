@@ -55,6 +55,23 @@ export class PersonService {
     return await this.personRepository.find({});
   }
 
+  async ownerWithMostCats() {
+    return await this.personRepository
+      .createQueryBuilder('person')
+      .leftJoin('person.animals', 'animal')
+      .select('person.id')
+      .addSelect('person.firstName')
+      .addSelect('person.lastName')
+      .addSelect('COUNT(animal.id)', 'catCount')
+      .where('animal.species = :species', { species: 'cat' })
+      .groupBy('person.id')
+      .addGroupBy('person.firstName')
+      .addGroupBy('person.lastName')
+      .orderBy('catCount', 'DESC')
+      .limit(1)
+      .getOne();
+  }
+
   async updatePerson(id: number, data: Person): Promise<PersonEntity> {
     this.validatePersonData(data);
 

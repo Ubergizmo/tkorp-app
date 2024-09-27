@@ -31,7 +31,12 @@ type PersonEntity {
 type Query {
   persons: [PersonEntity!]!
   person(id: Float!): PersonEntity!
+  ownerWithMostCats: PersonEntity!
+  ownerWithMostAnimals: PersonEntity!
   animal(id: Float!): AnimalEntity!
+  oldestAnimal: AnimalEntity!
+  mostRepresentedSpecies: AnimalEntity!
+  getAnimalsWithOwnersByWeight: AnimalEntity!
   animals: [AnimalEntity!]!
 }
 

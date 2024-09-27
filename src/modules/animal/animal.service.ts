@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { AnimalEntity } from './animal.entity';
 import { Repository } from 'typeorm';
 import { Animal } from './Types';
+import { Query } from '@nestjs/graphql';
 
 @Injectable()
 export class AnimalService {
@@ -56,6 +57,42 @@ export class AnimalService {
 
   async getAllAnimal(): Promise<AnimalEntity[]> {
     return await this.animalRepository.find();
+  }
+
+  async oldestAnimal(): Promise<AnimalEntity> {
+    return await this.animalRepository
+      .createQueryBuilder('animal')
+      .orderBy('animal.dateOfBirth', 'ASC')
+      .limit(1)
+      .getOne();
+  }
+
+  async mostRepresentedSpecies(): Promise<AnimalEntity> {
+    return this.animalRepository
+      .createQueryBuilder('animal')
+      .select('animal.species', 'species')
+      .addSelect('COUNT(animal.species)', 'species_count')
+      .groupBy('animal.species')
+      .orderBy('species_count', 'DESC')
+      .limit(1)
+      .getRawOne();
+  }
+
+  async getAnimalsWithOwnersByWeight(): Promise<AnimalEntity> {
+    return await this.animalRepository
+      .createQueryBuilder('animal')
+      .innerJoinAndSelect('animal.owner', 'person')
+      .select([
+        'person.id',
+        'person.firstName',
+        'person.lastName',
+        'animal.id',
+        'animal.name',
+        'animal.weight',
+      ])
+      .orderBy('animal.weight', 'DESC')
+      .limit(1)
+      .getOne();
   }
 
   async updateAnimal(id: number, data: Animal): Promise<AnimalEntity> {
